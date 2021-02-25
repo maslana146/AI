@@ -1,0 +1,171 @@
+EVRYBODY DOWN
+(pickup-from-block c b)
+(putdown-to-floor c)
+(pickup-from-block e d)
+(putdown-to-floor e)
+(pickup-from-block b a)
+(putdown-to-floor b)
+
+
+5 BLOCKS
+(pickup-from-block c b)
+(putdown-to-floor c)
+(pickup-from-block e d)
+(putdown-to-floor e)
+(pickup-from-floor d)
+(putdown-to-block b d)
+
+BULDING a TOWER
+(pickup-from-floor g)
+(putdown-to-block h g)
+(pickup-from-floor f)
+(putdown-to-block g f)
+(pickup-from-floor e)
+(putdown-to-block f e)
+(pickup-from-floor d)
+(putdown-to-block e d)
+(pickup-from-floor c)
+(putdown-to-block d c)
+(pickup-from-floor b)
+(putdown-to-block c b)
+(pickup-from-floor a)
+(putdown-to-block b a)
+
+
+  (define
+	(domain world-of-blocks)
+	(:requirements :adl)
+	(:predicates
+		(on-top ?x ?y)
+		(on-floor ?x)
+		(hold ?x)
+		(clear ?x)
+	)
+	; pickup block x from bloc y
+	(:action pickup-from-block
+		:parameters (?x ?y)
+		:precondition
+		(and
+		    (on-top ?x ?y)
+		    (clear ?x)
+		)
+		:effect
+		(and
+			(hold ?x)
+			(clear ?y)
+			(not (on-top ?x ?y))
+			(not (clear ?x)
+		)
+	))
+	
+	; putdown block x to block y
+	(:action putdown-to-block
+		:parameters (?x ?y)
+		:precondition
+		(and
+		    (clear ?y)
+			(hold ?x)
+		)
+		:effect
+		(and
+		    (clear ?x)
+		    (on-top ?x ?y)
+		    (not (clear ?y))
+			(not (hold ?x))
+			
+		)
+	)
+	
+	; pickup block x from floor
+	(:action pickup-from-floor
+		:parameters (?x)
+		:precondition
+		(and
+		    (clear ?x)
+			(on-floor ?x)
+		)
+		:effect
+		(and
+		    (hold ?x)
+		    (not (clear ?x))
+			(not (on-floor ?x))
+			
+		)
+	)
+	;putdown block x on the floor
+	(:action putdown-to-floor
+		:parameters (?x)
+		:precondition
+		(and
+		    (clear ?x)
+			(hold ?x)
+		)
+		:effect
+		(and
+		    (clear ?x)
+		    (on-floor ?x)
+			(not (hold ?x))
+			
+		)
+	)
+)
+
+(define (problem p1)
+	(:domain world-of-blocks)
+	(:objects a b c d e)
+	(:init
+        (on-floor ?a)
+        (on-floor ?d)
+        (on-top ?b ?a)
+        (on-top ?e ?d)
+        (on-top ?c ?b)
+	)
+	(:goal
+		(and
+            (on-top ?d ?b)
+		)
+	)
+)
+ 
+ 
+(define (problem blocks5)
+	(:domain world-of-blocks)
+	(:objects a b c d e)
+	(:init
+	    (clear ?c)
+	    (clear ?e)
+        (on-floor ?a)
+        (on-floor ?d)
+        (on-top ?b ?a)
+        (on-top ?e ?d)
+        (on-top ?c ?b)
+	)
+	(:goal
+		(and
+            (on-top ?d ?b)
+		)
+	)
+)
+
+(define (problem down)
+	(:domain world-of-blocks)
+	(:objects a b c d e)
+	(:init
+        (on-floor a)
+        (on-floor d)
+        (on-top b a)
+        (on-top e d)
+        (on-top c b)
+        (clear c)
+	    (clear e)
+	)
+	(:goal
+		(and
+            (on-floor a)
+            (on-floor b)
+            (on-floor c)
+            (on-floor d)
+            (on-floor e)
+		)
+	)
+)
